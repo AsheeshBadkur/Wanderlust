@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate') -%>
+    <div class="row">
+        <div class="col-8 offset-2">
+    <h3> Create a new Listings</h3>
+
+
+ <form action="/listings" novalidate class="needs-validation" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" name="listing[title]" placeholder="Enter Title" required>
+    <div class="valid-feedback"> Title looks Good !</div>
+    <div class="invalid-feedback">Enter Title</div>
+</div>
+
+    <div class="mb-3">
+    <label for="description">Description</label>
+    <textarea class="form-control" name="listing[description]" placeholder="Enter Description" required></textarea>
+<div class="invalid-feedback">Enter Description</div>
+</div>
+
+
+<div class="mb-3">
+    <label for="image" class="form-label">Image Link</label>
+    <input name="listing[image]" class="form-control" placeholder="Upload Image" type="file" required>
+</div>
+
+<div class="row">
+     <div class="mb-3 col-md-4">
+    <label for="country">Country</label>
+    <input type="text" class="form-control" name="listing[country]" placeholder="Country" required>
+<div class="invalid-feedback">Enter Valid Country Name</div>
+</div>
+
+    <div class="mb-3 col-md-8">
+    <label for="price">Price per night (&#x20B9;)</label>
+    <input type="number" class="form-control" name="listing[price]" placeholder="Price" required>
+<div class="invalid-feedback">Enter Valid Price</div>
+</div>
+</div>
+
+    <div class="mb-3">
+    <label for="location">Location</label>
+    <input type="text" class="form-control" name="listing[location]" placeholder="Enter your Location" required>
+<div class="invalid-feedback">Enter Valid Location</div>
+</div>
+
+    <br/>
+    <button class="btn btn-dark add-btn">Add</button>
+</form>
+    </form>
+    <br/><br/>
+    </div>
+    </div>
