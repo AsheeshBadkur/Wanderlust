@@ -10,39 +10,34 @@ min-height: 100vh;
 .navbar {
     height: auto;
     min-height: 5rem;
-    background-color: white;
-    padding: 0.5rem 1rem;
+    background-color: white !important;
+    padding: 0.5rem 0;
 }
 
 .navbar .container-fluid {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
     align-items: center;
 }
 
-.navbar-brand {
-    flex-shrink: 0;
-}
-
-.navbar-toggler {
-    flex-shrink: 0;
-}
-
 @media (max-width: 768px) {
-    .search-inp,
-    .d-md-none .form-control {
-        min-width: 0;
-        width: 100%;
-        padding: 0.4rem 0.8rem;
+    .search-inp {
         font-size: 0.85rem;
-    }
-    .d-md-none.d-flex {
-        flex: 1;
-        margin: 0 0.5rem;
+        padding: 0.4rem 0.8rem;
     }
     .btn-Search {
         padding: 0.4rem 0.7rem;
-        flex-shrink: 0;
-
+    }
+    /* Hide collapse content by default on mobile */
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        z-index: 1000;
+        padding: 1rem;
+        border-bottom: 1px solid #ebebeb;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 }
 .fa-compass{

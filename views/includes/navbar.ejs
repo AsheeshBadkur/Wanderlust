@@ -1,49 +1,46 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid px-4">
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
+  <div class="container-fluid px-3" style="flex-wrap: nowrap;">
 
     <!-- Brand Logo -->
-    <a class="navbar-brand" href="/listings">
+    <a class="navbar-brand flex-shrink-0" href="/listings">
       <i class="fa-solid fa-compass"></i>
     </a>
 
-    <!-- Search bar - MOBILE ONLY -->
-    <div class="d-flex d-md-none mx-2 search-wrapper">
+    <!-- Search bar - MOBILE ONLY - always visible -->
+    <div class="d-flex d-md-none flex-grow-1 mx-2" style="position:relative;">
       <input class="form-control me-2 search-inp" id="mobileSearch" type="search"
-             placeholder="Search" aria-label="Search" autocomplete="off"/>
-      <button class="btn btn-Search" type="submit">
+             placeholder="Search" autocomplete="off"/>
+      <button class="btn btn-Search flex-shrink-0" type="button">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
       <div class="suggestions-box" id="mobileSuggestions"></div>
     </div>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <!-- Hamburger - MOBILE ONLY -->
+    <button class="navbar-toggler flex-shrink-0 d-md-none" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- All nav content - collapses on mobile -->
     <div class="collapse navbar-collapse" id="navbarNav">
-
-      <!-- Left links - DESKTOP ONLY -->
-      <ul class="navbar-nav me-auto d-none d-md-flex">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" href="/listings">Explore</a>
         </li>
       </ul>
 
-      <!-- Search bar - DESKTOP ONLY -->
+      <!-- Search - DESKTOP ONLY -->
       <div class="d-none d-md-flex mx-auto search-wrapper">
         <input class="form-control me-2 search-inp" id="desktopSearch" type="search"
-               placeholder="Search Destinations" aria-label="Search" autocomplete="off"/>
-        <button class="btn btn-Search" type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
+               placeholder="Search Destinations" autocomplete="off"/>
+        <button class="btn btn-Search" type="button">
+          <i class="fa-solid fa-magnifying-glass"></i> Search
         </button>
         <div class="suggestions-box" id="desktopSuggestions"></div>
       </div>
 
-      <!-- Right links -->
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item d-md-none">
-          <a class="nav-link" href="/listings">Explore</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="/listings/new">Airbnb your home</a>
         </li>
@@ -69,7 +66,7 @@
           </li>
         <% } %>
       </ul>
-
     </div>
+
   </div>
 </nav>
