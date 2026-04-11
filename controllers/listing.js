@@ -2,12 +2,21 @@ const Listing = require('../models/listing.js');
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken=process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+const Booking = require('../models/booking.js'); // add this at the top
 
-module.exports.index=(async(req, res) => {
-   let allListings=await Listing.find({});
-    res.render('listings/index.ejs',{allListings});
+module.exports.index = async (req, res) => {
+    let allListings;
     
-    });
+    if (req.user && req.user.role === "owner") {
+        // Owner sees only their own listings
+        allListings = await Listing.find({ owner: req.user._id });
+    } else {
+        // Users and guests see all listings
+        allListings = await Listing.find({});
+    }
+    
+    res.render('listings/index.ejs', { allListings });
+};
 
     module.exports.newForm= ((req, res) => {
     res.render('listings/new.ejs');
@@ -31,16 +40,32 @@ let response=await geocodingClient.forwardGeocode({
     res.redirect('/listings');
 });
 
-module.exports.showListing=( async (req, res) => {
-    const {id}=req.params;
-    const listing=await Listing.findById(id).populate({path:"reviews",populate:{path:"author"}}).populate("owner");
-    if(!listing){
-        req.flash("error"," Listing you requested for doesn't Exist!");
+
+
+module.exports.showListing = async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id)
+        .populate({ path: "reviews", populate: { path: "author" } })
+        .populate("owner");
+    
+    if (!listing) {
+        req.flash("error", "Listing you requested for doesn't Exist!");
         return res.redirect("/listings");
     }
+
+    // Check if current user has already booked this listing
+    let hasBooked = false;
+    if (req.user) {
+        const existingBooking = await Booking.findOne({
+            listing: id,
+            user: req.user._id,
+        });
+        hasBooked = !!existingBooking;
+    }
+
     console.log(listing);
-    res.render('listings/show.ejs',{listing});
-});
+    res.render('listings/show.ejs', { listing, hasBooked });
+};
 
 module.exports.editForm=( async (req, res) => {
     const {id}=req.params;

@@ -12,6 +12,8 @@ const flash=require("connect-flash");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
+const bookingRouter = require("./routes/booking");
+const ownerRouter = require("./routes/owner");
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -84,22 +86,35 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/listings",listingsRouter);
-app.use("/listings/:id/reviews",reviewsRouter);
-app.use("/",userRouter);
+app.use("/listings", listingsRouter);
+app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", userRouter);
+app.use("/listings/:id/bookings", bookingRouter);
+app.use("/owner", ownerRouter);
 
-//Route Server
-// app.get('/',(req, res) => {
-//     res.send('Server is up and running!');
-// });
-
-app.use( (req,res,next)=>{
-    next(new ExpressError(404,"PAGE NOT FOUND!"));
+// Search suggestions API - must be BEFORE 404 handler
+app.get("/api/search", async (req, res) => {
+  const { q } = req.query;
+  if (!q || q.trim() === "") return res.json([]);
+  const Listing = require("./models/listing");
+  const results = await Listing.find({
+    $or: [
+      { title: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } },
+      { country: { $regex: q, $options: "i" } },
+    ],
+  }).limit(6).select("title location country _id");
+  res.json(results);
 });
 
-app.use((err,req,res,next)=>{
-    let{statusCode=500, message="Something went wrong"}=err;
-    res.status(statusCode).render("error.ejs",{message});
+// 404 handler - must be LAST
+app.use((req, res, next) => {
+    next(new ExpressError(404, "PAGE NOT FOUND!"));
+});
+
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Something went wrong" } = err;
+    res.status(statusCode).render("error.ejs", { message });
 });
 
 app.listen(3000, () => {

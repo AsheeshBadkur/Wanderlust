@@ -1,0 +1,111 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="container mt-4" style="max-width:600px">
+  <h2>Book: <%= listing.title %></h2>
+  <p class="text-muted"><%= listing.location %>, <%= listing.country %></p>
+  <p><strong>&#8377;<%= listing.price %></strong> / night</p>
+  <hr>
+
+  <% if (bookedDates.length > 0) { %>
+    <div class="alert alert-warning">
+      <strong>Already booked dates:</strong>
+      <ul class="mb-0 mt-1">
+        <% for (let b of bookedDates) { %>
+          <li>
+            <%= new Date(b.checkIn).toDateString() %> 
+            &rarr; 
+            <%= new Date(b.checkOut).toDateString() %>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/listings/<%= listing._id %>/bookings" method="POST">
+    <div class="mb-3">
+      <label class="form-label">Check-in date</label>
+      <input type="date" name="checkIn" id="checkIn" class="form-control" required
+             min="<%= new Date().toISOString().split('T')[0] %>">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Check-out date</label>
+      <input type="date" name="checkOut" id="checkOut" class="form-control" required
+             min="<%= new Date().toISOString().split('T')[0] %>">
+    </div>
+
+    <div id="date-conflict-warning" class="alert alert-danger d-none">
+      These dates overlap with an existing booking! Please choose different dates.
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Number of guests</label>
+      <input type="number" name="guests" class="form-control" min="1" max="20" value="1" required>
+    </div>
+
+    <div class="mb-3 p-3 bg-light rounded" id="price-summary">
+      <p class="mb-0 text-muted">Select dates to see price summary</p>
+    </div>
+
+    <button class="btn btn-dark w-100" id="confirm-btn">Confirm Booking</button>
+  </form>
+</div>
+
+<script>
+  const pricePerNight = parseInt("<%= listing.price %>");
+  const bookedDates = <%- JSON.stringify(bookedDates) %>;
+  const checkInInput = document.getElementById("checkIn");
+  const checkOutInput = document.getElementById("checkOut");
+  const summary = document.getElementById("price-summary");
+  const warning = document.getElementById("date-conflict-warning");
+  const confirmBtn = document.getElementById("confirm-btn");
+
+  function hasConflict(checkIn, checkOut) {
+    const newIn = new Date(checkIn);
+    const newOut = new Date(checkOut);
+    return bookedDates.some(b => {
+      const bookedIn = new Date(b.checkIn);
+      const bookedOut = new Date(b.checkOut);
+      return newIn < bookedOut && newOut > bookedIn;
+    });
+  }
+
+  function updateSummary() {
+    if (!checkInInput.value || !checkOutInput.value) return;
+
+    const nights = Math.ceil(
+      (new Date(checkOutInput.value) - new Date(checkInInput.value)) / 86400000
+    );
+
+    if (nights <= 0) {
+      summary.innerHTML = "<p class='text-danger mb-0'>Check-out must be after check-in</p>";
+      return;
+    }
+
+    // Check conflict
+    if (hasConflict(checkInInput.value, checkOutInput.value)) {
+      warning.classList.remove("d-none");
+      confirmBtn.disabled = true;
+      summary.innerHTML = "<p class='text-danger mb-0'>Please select different dates</p>";
+    } else {
+      warning.classList.add("d-none");
+      confirmBtn.disabled = false;
+      summary.innerHTML = `
+        <div class="d-flex justify-content-between">
+          <span>&#8377;${pricePerNight} x ${nights} nights</span>
+          <span>&#8377;${pricePerNight * nights}</span>
+        </div>
+        <hr class="my-2">
+        <div class="d-flex justify-content-between fw-bold">
+          <span>Total</span>
+          <span>&#8377;${pricePerNight * nights}</span>
+        </div>
+      `;
+    }
+
+    checkOutInput.min = checkInInput.value;
+  }
+
+  checkInInput.addEventListener("change", updateSummary);
+  checkOutInput.addEventListener("change", updateSummary);
+</script>

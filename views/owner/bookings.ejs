@@ -1,0 +1,47 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="container mt-4">
+  <h2>Owner Dashboard — Bookings Detail</h2>
+  <hr>
+
+  <% if (bookings.length === 0) { %>
+    <div class="alert alert-info">No bookings yet on your listings.</div>
+  <% } else { %>
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Listing</th>
+            <th>Guest</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Guests</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Booked On</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let b of bookings) { %>
+            <tr>
+              <td>
+                <a href="/listings/<%= b.listing._id %>">
+                  <%= b.listing.title %>
+                </a>
+              </td>
+              <td><%= b.user.username %></td>
+              <td><%= new Date(b.checkIn).toDateString() %></td>
+              <td><%= new Date(b.checkOut).toDateString() %></td>
+              <td><%= b.guests %></td>
+              <td>&#8377;<%= b.totalPrice %></td>
+              <td>
+                <span class="badge bg-success"><%= b.status %></span>
+              </td>
+              <td><%= new Date(b.createdAt).toDateString() %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
