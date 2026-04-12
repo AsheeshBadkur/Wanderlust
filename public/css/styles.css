@@ -124,11 +124,13 @@ min-height: 100vh;
 }
 /* Show page */
 .show-img {
-    height: 35vh;
-    object-fit: cover;
+    height: auto;
+    max-height: 60vh;
+    width: 100%;
+    object-fit: contain;
     border-radius: 1rem 1rem 0 0;
+    background-color: #f8f8f8;
 }
-
 .show-card {
     border: none !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);

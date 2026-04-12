@@ -1,12 +1,12 @@
+<% const user = typeof currentUser !== 'undefined' ? currentUser : null; %>
+
 <nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
   <div class="container-fluid px-3" style="flex-wrap: nowrap;">
 
-    <!-- Brand Logo -->
     <a class="navbar-brand flex-shrink-0" href="/listings">
       <i class="fa-solid fa-compass"></i>
     </a>
 
-    <!-- Search bar - MOBILE ONLY - always visible -->
     <div class="d-flex d-md-none flex-grow-1 mx-2" style="position:relative;">
       <input class="form-control me-2 search-inp" id="mobileSearch" type="search"
              placeholder="Search" autocomplete="off"/>
@@ -16,13 +16,11 @@
       <div class="suggestions-box" id="mobileSuggestions"></div>
     </div>
 
-    <!-- Hamburger - MOBILE ONLY -->
     <button class="navbar-toggler flex-shrink-0 d-md-none" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- All nav content - collapses on mobile -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
@@ -30,7 +28,6 @@
         </li>
       </ul>
 
-      <!-- Search - DESKTOP ONLY -->
       <div class="d-none d-md-flex mx-auto search-wrapper">
         <input class="form-control me-2 search-inp" id="desktopSearch" type="search"
                placeholder="Search Destinations" autocomplete="off"/>
@@ -44,7 +41,8 @@
         <li class="nav-item">
           <a class="nav-link" href="/listings/new">Airbnb your home</a>
         </li>
-        <% if (!currentUser) { %>
+
+        <% if (!user) { %>
           <li class="nav-item">
             <a class="nav-link" href="/signup"><b>Sign up</b></a>
           </li>
@@ -52,11 +50,12 @@
             <a class="nav-link" href="/login"><b>Login</b></a>
           </li>
         <% } %>
-        <% if (currentUser) { %>
+
+        <% if (user) { %>
           <li class="nav-item">
-            <span class="nav-link">Hello, <%= currentUser.username %>!</span>
+            <span class="nav-link">Hello, <%= user.username %>!</span>
           </li>
-          <% if (currentUser.role === "owner") { %>
+          <% if (user.role === "owner") { %>
             <li class="nav-item">
               <a class="nav-link" href="/owner/bookings"><b>Bookings</b></a>
             </li>
