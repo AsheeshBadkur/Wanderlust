@@ -149,7 +149,8 @@ min-height: 100vh;
 
 @media (max-width: 768px) {
     .show-img {
-        height: 25vh;
+        height: auto;
+        
     }
     #map {
         height: 220px;
