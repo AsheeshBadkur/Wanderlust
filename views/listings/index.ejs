@@ -80,8 +80,10 @@
             <div class="card-body">
               <p class="card-text">
                 <b><%= listing.title %></b> <br/>
-                Price/night &#x20B9 <%= listing.price.toLocaleString("en-IN") %>
-                <i class="tax-info"> &nbsp;&nbsp; +18% gst</i>
+               Price/night &#x20B9;
+<span class="base-price"><%= listing.price.toLocaleString("en-IN") %></span>
+<span class="taxed-price"><%= Math.round(listing.price * 1.18).toLocaleString("en-IN") %></span>
+<i class="tax-info">incl. 18% GST</i>
               </p>
             </div>
           </div>
@@ -93,17 +95,26 @@
 </div>
 
 <script>
-  const taxSwitch = document.getElementById('flexswitchCheckDefault');
-  taxSwitch.addEventListener('click', () => {
-    let taxInfo = document.getElementsByClassName('tax-info');
-    for (info of taxInfo) {
-      if (taxSwitch.checked) {
-        info.style.display = 'inline';
-      } else {
-        info.style.display = 'none';
-      }
-    }
-  });
+const taxSwitch = document.getElementById('flexswitchCheckDefault');
+
+if (taxSwitch) {
+  const updatePrices = () => {
+    document.querySelectorAll('.listing-card').forEach((card) => {
+      const basePrice = card.querySelector('.base-price');
+      const taxedPrice = card.querySelector('.taxed-price');
+      const taxInfo = card.querySelector('.tax-info');
+
+      if (!basePrice || !taxedPrice || !taxInfo) return;
+
+      basePrice.style.display = taxSwitch.checked ? 'none' : 'inline';
+      taxedPrice.style.display = taxSwitch.checked ? 'inline' : 'none';
+      taxInfo.style.display = taxSwitch.checked ? 'inline' : 'none';
+    });
+  };
+
+  taxSwitch.addEventListener('change', updatePrices);
+  updatePrices();
+}
 
   // Active filter highlight
   const filters = document.querySelectorAll('.filter');

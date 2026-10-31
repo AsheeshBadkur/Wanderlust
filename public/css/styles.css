@@ -436,3 +436,41 @@ min-height: 100vh;
     flex-direction: column;
   }
 }
+.travel-plan-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.travel-plan-nav-link i {
+  color: #e63950;
+}
+
+.ai-badge {
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: #fff0f2;
+  color: #c92a3b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+.nav-feature-link,
+.travel-plan-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.nav-feature-link i,
+.travel-plan-nav-link i {
+  color: #e63950;
+}
+/* Tax Information */
+.taxed-price,
+.tax-info {
+  display: none;
+}
