@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate') -%>
+
+<main class="travel-plan-page">
+  <% if (!travelPlan) { %>
+    <section class="travel-plan-form-card">
+      <p class="travel-plan-eyebrow">WANDERLUST AI</p>
+      <h1>Plan your trip</h1>
+
+      <form id="travelPlanForm" action="/travelPlan" method="POST">
+        <div class="travel-plan-field">
+          <label for="destination">Destination</label>
+          <input
+            class="form-control"
+            id="destination"
+            name="destination"
+            type="text"
+            required
+            value="<%= locals.destination || '' %>"
+          >
+        </div>
+
+        <div class="travel-plan-field">
+          <label for="days">Number of days</label>
+          <input
+            class="form-control"
+            id="days"
+            name="days"
+            type="number"
+            min="1"
+            required
+            value="<%= locals.days ?? '' %>"
+          >
+        </div>
+
+        <div class="travel-plan-field">
+          <label for="budget">Budget</label>
+          <select class="form-select" id="budget" name="budget" required>
+            <option value="" <%= !locals.budget ? 'selected' : '' %>>Choose a budget</option>
+            <option value="low" <%= locals.budget === 'low' ? 'selected' : '' %>>Low</option>
+            <option value="moderate" <%= locals.budget === 'moderate' ? 'selected' : '' %>>Moderate</option>
+            <option value="high" <%= locals.budget === 'high' ? 'selected' : '' %>>High</option>
+          </select>
+        </div>
+
+        <div class="travel-plan-field">
+          <label for="interests">Interests</label>
+          <input
+            class="form-control"
+            id="interests"
+            name="interests"
+            type="text"
+            placeholder="For example: temples, food, nature"
+            required
+            value="<%= locals.interests || '' %>"
+          >
+        </div>
+
+        <button class="btn btn-danger" type="submit">
+          Generate travel plan
+        </button>
+      </form>
+    </section>
+  <% } else { %>
+    <section class="travel-plan-result">
+      <header class="travel-plan-header">
+        <div>
+          <p class="travel-plan-eyebrow">YOUR TRIP</p>
+          <h1>Your travel plan</h1>
+
+          <div class="travel-plan-meta">
+            <span><%= destination %></span>
+            <span><%= days %> days</span>
+            <span><%= budget %> budget</span>
+            <span><%= interests %></span>
+          </div>
+        </div>
+
+        <a class="btn btn-outline-secondary" href="/travelPlan">
+          Plan another trip
+        </a>
+      </header>
+
+      <article class="travel-plan-content">
+        <%- travelPlan %>
+      </article>
+    </section>
+  <% } %>
+</main>

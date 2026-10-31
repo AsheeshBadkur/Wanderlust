@@ -64,3 +64,17 @@ setTimeout(() => {
     setTimeout(() => alert.remove(), 500);
   });
 }, 3000);
+// Show a loading state while the travel plan is being generated.
+const travelPlanForm = document.getElementById('travelPlanForm');
+
+if (travelPlanForm) {
+  travelPlanForm.addEventListener('submit', () => {
+    if (!travelPlanForm.checkValidity()) return;
+
+    const button = travelPlanForm.querySelector('button[type="submit"]');
+    if (!button) return;
+
+    button.disabled = true;
+    button.textContent = 'Generating...';
+  });
+}

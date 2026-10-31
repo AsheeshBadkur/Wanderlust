@@ -29,7 +29,7 @@ app.use(methodOverride('_method'));
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
-
+const travelPlanRouter = require('./routes/travelPlan.js');
 const MONGO_URL=process.env.DB_URL
 
 const store = MongoStore.create({
@@ -91,6 +91,7 @@ app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 app.use("/listings/:id/bookings", bookingRouter);
 app.use("/owner", ownerRouter);
+app.use('/travelPlan', travelPlanRouter);
 
 // Search suggestions API - must be BEFORE 404 handler
 app.get("/api/search", async (req, res) => {
